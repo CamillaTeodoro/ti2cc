@@ -4,11 +4,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Usuario;
+import model.Employee;
 
-public class UsuarioDAO extends DAO {
+public class EmployeeDAO extends DAO {
 	
-	public UsuarioDAO() {
+	public EmployeeDAO() {
 		super();
 		conectar();
 	}
@@ -18,13 +18,13 @@ public class UsuarioDAO extends DAO {
 	}
 	
 	
-	public boolean insert(Usuario usuario) {
+	public boolean insert(Employee Employee) {
 		boolean status = false;
 		try {  
 			Statement st = conexao.createStatement();
-			String sql = "INSERT INTO usuario (codigo, login, senha, sexo) "
-				       + "VALUES ("+usuario.getCodigo()+ ", '" + usuario.getLogin() + "', '"  
-				       + usuario.getSenha() + "', '" + usuario.getSexo() + "');";
+			String sql = "INSERT INTO Employee (id, name, department, salary) "
+				       + "VALUES ("+Employee.getid()+ ", '" + Employee.getname() + "', '"  
+				       + Employee.getdepartment() + "', " + Employee.getsalary() + ");";
 			System.out.println(sql);
 			st.executeUpdate(sql);
 			st.close();
@@ -36,93 +36,93 @@ public class UsuarioDAO extends DAO {
 	}
 
 	
-	public Usuario get(int codigo) {
-		Usuario usuario = null;
+	public Employee get(int id) {
+		Employee Employee = null;
 		
 		try {
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			String sql = "SELECT * FROM produto WHERE id=" + codigo;
+			String sql = "SELECT * FROM produto WHERE id=" + id;
 			System.out.println(sql);
 			ResultSet rs = st.executeQuery(sql);	
 	        if(rs.next()){            
-	        	 usuario = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0));
+	        	 Employee = new Employee(rs.getInt("id"), rs.getString("name"), rs.getString("department"), rs.getString("salary").charAt(0));
 	        }
 	        st.close();
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		return usuario;
+		return Employee;
 	}
 	
 	
-	public List<Usuario> get() {
+	public List<Employee> get() {
 		return get("");
 	}
 
 	
-	public List<Usuario> getOrderByCodigo() {
-		return get("codigo");		
+	public List<Employee> getOrderByid() {
+		return get("id");		
 	}
 	
 	
-	public List<Usuario> getOrderByLogin() {
-		return get("login");		
+	public List<Employee> getOrderByname() {
+		return get("name");		
 	}
 	
 	
-	public List<Usuario> getOrderBySexo() {
-		return get("sexo");		
+	public List<Employee> getOrderBysalary() {
+		return get("salary");		
 	}
 	
 	
-	private List<Usuario> get(String orderBy) {	
+	private List<Employee> get(String orderBy) {	
 	
-		List<Usuario> usuarios = new ArrayList<Usuario>();
+		List<Employee> Employees = new ArrayList<Employee>();
 		
 		try {
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			String sql = "SELECT * FROM usuario" + ((orderBy.trim().length() == 0) ? "" : (" ORDER BY " + orderBy));
+			String sql = "SELECT * FROM Employee" + ((orderBy.trim().length() == 0) ? "" : (" ORDER BY " + orderBy));
 			System.out.println(sql);
 			ResultSet rs = st.executeQuery(sql);	           
 	        while(rs.next()) {	            	
-	        	Usuario u = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0));
-	            usuarios.add(u);
+	        	Employee u = new Employee(rs.getInt("id"), rs.getString("name"), rs.getString("department"), rs.getString("salary").charAt(0));
+	            Employees.add(u);
 	        }
 	        st.close();
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		return usuarios;
+		return Employees;
 	}
 
 
-	public List<Usuario> getSexoMasculino() {
-		List<Usuario> usuarios = new ArrayList<Usuario>();
+	public List<Employee> getsalaryMasculino() {
+		List<Employee> Employees = new ArrayList<Employee>();
 		
 		try {
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			String sql = "SELECT * FROM usuario WHERE usuario.sexo LIKE 'M'";
+			String sql = "SELECT * FROM Employee WHERE Employee.salary LIKE 'M'";
 			System.out.println(sql);
 			ResultSet rs = st.executeQuery(sql);	           
 	        while(rs.next()) {	            	
-	        	Usuario u = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0));
-	            usuarios.add(u);
+	        	Employee u = new Employee(rs.getInt("id"), rs.getString("name"), rs.getString("department"), rs.getString("salary").charAt(0));
+	            Employees.add(u);
 	        }
 	        st.close();
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		return usuarios;
+		return Employees;
 	}
 	
 	
-	public boolean update(Usuario usuario) {
+	public boolean update(Employee Employee) {
 		boolean status = false;
 		try {  
 			Statement st = conexao.createStatement();
-			String sql = "UPDATE usuario SET login = '" + usuario.getLogin() + "', senha = '"  
-				       + usuario.getSenha() + "', sexo = '" + usuario.getSexo() + "'"
-					   + " WHERE codigo = " + usuario.getCodigo();
+			String sql = "UPDATE Employee SET name = '" + Employee.getname() + "', department = '"  
+				       + Employee.getdepartment() + "', salary = '" + Employee.getsalary() + "'"
+					   + " WHERE id = " + Employee.getid();
 			System.out.println(sql);
 			st.executeUpdate(sql);
 			st.close();
@@ -133,11 +133,11 @@ public class UsuarioDAO extends DAO {
 		return status;
 	}
 	
-	public boolean delete(int codigo) {
+	public boolean delete(int id) {
 		boolean status = false;
 		try {  
 			Statement st = conexao.createStatement();
-			String sql = "DELETE FROM usuario WHERE codigo = " + codigo;
+			String sql = "DELETE FROM Employee WHERE id = " + id;
 			System.out.println(sql);
 			st.executeUpdate(sql);
 			st.close();
@@ -149,12 +149,12 @@ public class UsuarioDAO extends DAO {
 	}
 	
 	
-	public boolean autenticar(String login, String senha) {
+	public boolean autenticar(String name, String department) {
 		boolean resp = false;
 		
 		try {
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			String sql = "SELECT * FROM usuario WHERE login LIKE '" + login + "' AND senha LIKE '" + senha  + "'";
+			String sql = "SELECT * FROM Employee WHERE name LIKE '" + name + "' AND department LIKE '" + department  + "'";
 			System.out.println(sql);
 			ResultSet rs = st.executeQuery(sql);
 			resp = rs.next();
