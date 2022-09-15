@@ -15,7 +15,7 @@ public class Aplicacao {
 		
 		
 		System.out.println("\n\n==== Inserir usuário === ");
-		Employee Employee = new Employee(1, "Pablo", "Engineering", 15000);
+		Employee Employee = new Employee(2, "Camilla", "Engineering", 25000);
 		if(EmployeeDAO.insert(Employee) == true) {
 			System.out.println("Inserção com sucesso -> " + Employee.toString());
 		}
